@@ -5,7 +5,7 @@
     /* padding-right: 2%; */
 }
 
-@media only screen and (max-width: 600px){
+@media only screen and (max-width: 800px){
     .container{
         grid-template-columns: 0 100%;
     }
