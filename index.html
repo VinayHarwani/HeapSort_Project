@@ -1,0 +1,346 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Heap Sort</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style/style.css">
+</head>
+
+<body>
+    <div class="header"><h1> Introduction to HeapSort</h1></div>
+
+    <div class="container">
+        <div class="left-div">
+            <h4 class="topic-header">List Of Topics</h4>
+
+            <a href="#Introduction">> Introduction</a>
+
+            <div class="secondary-list">
+                <a href="#complete-tree">> Complete Binary Tree</a><br />
+                <a href="#binary-heap">> Binary Heap</a><br />
+                <a href="#array-representation">> Array Representation Of Tree</a>
+            </div>
+
+            <a href="#Heapify">> Heapify</a>
+
+            <div class="secondary-list">
+                <a href="#insertion-in-heap">> Insertion in heap</a><br />
+                <a href="#deletion-in-heap">> Deletion in heap</a>
+            </div>
+
+            <a href="#heapsort">> Implementation of HeapSort</a><br />
+            <a href="#javacode">> Java code for HeapSort</a>
+        </div>
+
+        <div class="right-div">
+            <div id="Introduction">
+                <h3>Introduction</h3>
+                <hr>
+
+                <p>
+                    Heap sort is a comparison-based sorting technique based on Binary Heap data structure.
+                    It is similar to selection sort where we first find the minimum or maximum element and place that
+                    element at the beginning.
+                    We repeat the same process for the remaining elements.
+                </p>
+
+                <p>
+                    To understand Binary Heap we have to use a complete binary tree
+                </p>
+
+                <div id="complete-tree" class="sub-div">
+                    <h5> - Complete Binary Tree : -</h5>
+
+                    <p>
+                        A complete binary tree is a binary tree in which every level, except possibly the last,
+                        is completely filled, and all nodes are as far left as possible.
+                    </p>
+
+                    <p>
+                        For example this is a complete binary tree-
+                    </p>
+                    <img src="assets/completebinarytree1.jpg" alt="correctcompletebinarytree">
+
+                    <p>
+                        In this tree level 1 ,2 & 3 are completely filled with nodes and in level 4 the nodes are not
+                        completely filled but they are present at most left side of the tree so it is a complete binary
+                        tree.
+                    </p>
+
+                    <p>
+                        But, this is not a complete binary tree- 
+                    </p>
+                    <img src="assets/completebinarytree2.jpg" alt="incompletebinarytree">
+
+                    <p>
+                        As we can see that, in level 3 left child of node with element 30 is missing.
+                    </p>
+                    <p>
+                        Let's understand what a Binary Heap is.
+                    </p>
+                </div>
+
+                <div id="binary-heap" class="sub-div">
+                    <h5> - Binary Heap : -</h5>
+
+                    <p>
+                        A Binary Heap is a Complete Binary Tree where items are stored in a special order such that the
+                        value in a parent node is greater(or smaller) than the values in its two children nodes.
+                        The former is called max heap and the latter is called min-heap.
+                        The heap can be represented by a binary tree or array.
+                    </p>
+
+                    <p>
+                        We will work on max heap by getting the maximum element from our heap,
+                        similarly like max heap we can also create min heap also.
+                    </p>
+
+                    <p>
+                        Our max heap looks like this - 
+                    </p>
+                    <img src="assets/Binaryheap1.jpg" alt="correctbinaryheap">
+
+                    <p>
+                        Note that every element present at any node is greater than its child, so it follows our max
+                        heap.
+                    </p>
+                    <img src="assets/binaryheap2.jpg" alt="incorrectbinaryheap">
+                    <p>
+                        But in the above tree as we can see at 2<sup>nd</sup> level node with value 32 is less than its
+                        right child,
+                        so it is not a max heap.
+                    </p>
+                </div>
+
+                <div id="array-representation" class="sub-div">
+                    <h5> - Array representation of Tree : -</h5>
+
+                    <p>
+                        To represent our complete tree in an Array is very simple we just fill the elements at our node
+                        in array in level order, so at every level we will move left to right and fill our array.
+                    </p>
+                    <p>
+                        Our array will look like this after fill all the nodes -
+                    </p>
+                    <img class="array" src="assets/arrayrepresentation.jpeg" alt="arrayrepresentation">
+                    <p>
+                        For every index 'i' in our Array its child can be found at (2*i + 1) and (2*i + 2),
+                        where former refrences to left child while later refrences to right child of that node.
+                    </p>
+                    <p>
+                        For example, for element 30 at i=2 , its child will be at (2*2 + 1) and (2*2 + 2) which is
+                        index 5 and 6, and elements at index 5 and 6 are 14 and 26 which we can confirm from our Binary
+                        Heap
+                    </p>
+                </div>
+            </div>
+
+            <div id="Heapify">
+                <h3>Heapify</h3>
+                <hr/>
+
+                <p>
+                    We saw earlier what a binary heap is, now we will see how to create that binary heap.
+                </p>
+                <p>
+                    The function we use to create our desired heap is called heapify,
+                    in this we maintain our elements such that our heap forms a binary heap.<br />
+                    We perform main two functions on our heap , which is insertion and deletion of an element.
+                </p>
+
+                <div id="insertion-in-heap" class="sub-div">
+                    <h5> - Insertion in a heap : -</h5>
+
+                    <p>
+                        When we add a new element in our heap , our heap will be disoriented and it may not follow
+                        binary heap.
+                        So we need to change our elements position such that it follows binary heap.
+                    </p>
+                    <p>
+                        Let's say we are inserting an element 45 in our heap.<br />
+                        To do that we need to insert it at the end of the heap such that it follows complete binary
+                        tree.
+                        And in an Array we can store it after the last index.<br />
+                        So after inserting our tree and array will look like this -
+                    </p>
+                    <img src="assets/heapifyinsertion1.jpg" alt="45 inserted in our tree">
+                    <img class="array" src="assets/arrayinsertion1.jpg" alt="45 inserted in our array">
+                    <p>
+                        But now it does not follws binary heap, so we compare our element with its parent and swap the
+                        positions
+                        if our element is greater than its parent,<br />
+                        So in this as 45 is greater that 36 so they will swap position and
+                        45 will check with 40 and as 45 is still greater so they will swap position.<br />
+                        Now 45 will check with 50 but as 45 is less than 50 so they will not swap and we will have our
+                        binary tree.
+                    </p>
+                    <p>
+                        So our new binary tree will look like this -
+                    </p>
+
+                    <img src="assets/heapifyinsertion2.jpg" alt="45 at correct position in our tree">
+                    <img class="array" src="assets/arrayinsertion2.jpg" alt="45 at correct position in our array">
+                </div>
+
+                <div id="deletion-in-heap" class="sub-div">
+                    <h5> - Deletion in a heap : -</h5>
+
+                    <p>
+                        In heap we only concern with root element or first element as it gives our desired output,
+                        So to delete we always delete the root.<br />
+                        But after we delete the root it will not follow binary heap and will look like this -
+                    </p>
+                    <img src="assets/heapifydeletion1.jpg" alt="root is deleted in our tree">
+                    <img class="array" src="assets/arraydeletion1.jpg" alt="first element is deleted in our array">
+                    <p>
+                        Now we will replace our current root with the last
+                        element in our heap, <br />so now our heap will look like -
+                    </p>
+
+                    <img src="assets/heapifydeletion2.jpg" alt="last element at root in our tree">
+                    <img class="array" src="assets/arraydeletion2.jpg" alt="last element at root in our array">
+                    <p>
+                        But this is not following binary tree,<br />
+                        So we will replace our current element with its larger child and in this case it is 45,
+                        So 45 and 36 will swap position.<br />
+                        And our heap will look like this.
+                    </p>
+
+                    <img src="assets/heapifydeletion3.jpg" alt="36 and 45 are swapped in tree">
+                    <img class="array" src="assets/arraydeletion3.jpg" alt="36 and 45 are swapped in array">
+                    <p>
+                        Still it is not following binary heap, so we will swap again with larger child,
+                        so 36 and 40 will swap position.<br />
+                        Now our heapp will look like this.
+                    </p>
+
+                    <img src="assets/heapifydeletion4.jpg" alt="deletion complete in tree">
+                    <img class="array" src="assets/arraydeletion4.jpg" alt="deletion complete in array">
+                </div>
+
+            </div>
+
+            <div id="heapsort">
+                <h3>Implementing HeapSort</h3>
+                <hr/>
+
+                <p>
+                    Note that after deletion in array we had empty space.<br />
+                    To implement Heap Sort we will use that new emoty space to store our element.
+                    So as we deleted 50 we will store that 50 in last index.
+                </p>
+
+                <img class="array" src="assets/arrayheapsort1.jpg" alt="50 is inserted in the end">
+                <p>
+                    Now we will perform deletion again and store the maximum element at new empty space.
+                    <br />It will look something like this.
+                </p>
+
+                <img src="assets/heapsort2.jpg" alt="45 is deleted in tree">
+                <img class="array" src="assets/arrayheapsort2.jpg" alt="45 is deleted in array">
+                <p>
+                    Now we will perform heapify to create binary heap which will look like this - 
+                </p>
+                <img src="assets/heapsort3.jpg" alt="last 2 element sorted">
+                <img class="array" src="assets/arrayheapsort3.jpg" alt="last 2 element sorted in array">
+                <p>
+                    Note that last two elements are sorted in our heap, so we will recusively do these steps again and
+                    again
+                    till the first element and in the end we will have an sorted array.
+                </p>
+
+                <img class="array" src="assets/finalsortedarray.jpg" alt="complete sorted array">
+            </div>
+
+            <div id="javacode">
+                <h3>Java Code</h3>
+                <hr/>
+
+                <pre>
+                    <code>                
+<span class="comment">// Java program for implementation of Heap Sort</span>
+<span class="keyword">public class</span> HeapSort {
+    <span class="keyword"></span>public void</code> sort(<span class="keyword">int</span> arr[])
+    {
+        <span class="keyword">int</span> n = arr.length;
+ 
+        <span class="comment">// Build heap (rearrange array)</span>
+        <span class="keyword">for</span> (int i = n / 2 - 1; i >= 0; i--)
+            heapify(arr, n, i);
+ 
+        <span class="comment">// One by one extract an element from heap</span>
+        <span class="keyword">fo</span>r (<span class="keyword">int</span> i = n - 1; i > 0; i--) {
+            <span class="comment">// Move current root to end</span>
+            <span class="keyword">int</span> temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+ 
+            <span class="comment">// call max heapify on the reduced heap</span>
+            heapify(arr, i, 0);
+        }
+    }
+ 
+    <span class="comment">// To heapify a subtree rooted with node i which is
+    // an index in arr[]. n is size of heap</span>
+    <span class="keyword">void</span> heapify(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> i)
+    {
+        <span class="keyword">int</span> largest = i; <span class="comment">// Initialize largest as root</span>
+        <span class="keyword">int</span> l = 2 * i + 1; <span class="comment">// left = 2*i + 1</span>
+        <span class="keyword">int</span> r = 2 * i + 2; <span class="comment">// right = 2*i + 2</span>
+ 
+        <span class="comment">// If left child is larger than root</span>
+        <span class="keyword">if</span> (l &lt; n && arr[l] > arr[largest])
+            largest = l;
+ 
+        <span class="comment">// If right child is larger than largest so far</span>
+        <span class="keyword">if</span> (r &lt; n && arr[r] > arr[largest])
+            largest = r;
+ 
+        <span class="comment">// If largest is not root</span>
+        <span class="keyword">if</span> (largest != i) {
+            <span class="keyword">int</span> swap = arr[i];
+            arr[i] = arr[largest];
+            arr[largest] = swap;
+ 
+            <span class="comment">// Recursively heapify the affected sub-tree</span>
+            heapify(arr, n, largest);
+        }
+    }
+ 
+    <span class="comment">/* A utility function to print array of size n */</span>
+    <span class="keyword">static void</span> printArray(int arr[])
+    {
+        <span class="keyword">int</span> n = arr.length;
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; n; ++i)
+            System.out.print(arr[i] + <span class="string">" "</span>);
+        System.out.println();
+    }
+ 
+    <span class="comment">// Driver code</span>
+    <span class="keyword">public static void</span> main(<span class="keyword">String</span> args[])
+    {
+        <span class="keyword">int</span> arr[] = { 12, 11, 13, 5, 6, 7 };
+        <span class="keyword">int</span> n = arr.length;
+ 
+        HeapSort ob = new HeapSort();
+        ob.sort(arr);
+ 
+        System.out.println(<span class="string">"Sorted array is"</span>);
+        printArray(arr);
+    }
+}
+                    </code>
+                </pre>
+                <h4>OutPut</h4>
+                <hr/>
+                <p>Sorted array is <br />
+                    5 6 7 11 12 13</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
