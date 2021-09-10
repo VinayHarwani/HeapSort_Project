@@ -7,6 +7,7 @@ Heap sort uses heap data structure to sort our elements, so we created documenta
 
 This page uses basic concepts of HTML and CSS.
 
+With screen size getting smaller menu option collapses to create better readability.
 We have a menu option which links to various sections of the page.
 We have content part which explains all the concepts of heapsort introduction.
 We have multiple division of content each having respective images in assests folder.
